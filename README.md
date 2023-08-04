@@ -27,3 +27,24 @@
 * php artisan config:clear
 * php artisan cache:clear
 * php artisan optimize
+### Content. Themes.
+* Post test.
+* We pass the image in the test.
+* Post title validity test.
+* Image fidelity test.
+* Post update test.
+* Test on the posts index page and get all the posts.
+* Test on the posts page show and get one post.
+* Installing laravel breeze.
+* Test for deletion by a post-authorized user.
+* Test to delete a post only by an authorized user
+* Test for adding a post to the API.
+* Test for the validity of the post title in the API.
+* API Image Validity Test.
+* API post update test.
+* Attributes with date type in API testing.
+* Test to get a list of posts in the API
+* 02:03:34 Test for getting one post in the API.
+* Test for deleting a post by an authorized user in the API.
+* Test to delete a post only by an authorized user in the API. 
+* Unit Test example.
