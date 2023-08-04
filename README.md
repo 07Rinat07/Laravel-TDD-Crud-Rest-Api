@@ -44,7 +44,7 @@
 * API post update test.
 * Attributes with date type in API testing.
 * Test to get a list of posts in the API
-* 02:03:34 Test for getting one post in the API.
+* Test for getting one post in the API.
 * Test for deleting a post by an authorized user in the API.
 * Test to delete a post only by an authorized user in the API. 
 * Unit Test example.
