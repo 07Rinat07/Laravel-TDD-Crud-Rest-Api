@@ -74,17 +74,21 @@ class PostTest extends TestCase
 
     /** @test */
 
-//    public function attribute_image_is_file_for_storing_post()
-//    {
-//        $data = [
-//            'title' => 'Title',
-//            'description' => 'Description',
-//            'image' => 'gdgdgd'
-//        ];
-//
-//        $res = $this->post('/api/posts', $data);
-//
-//        $res->assertInvalid('image');
-//    }
+    public function attribute_image_is_file_for_storing_post()
+    {
+        $data = [
+            'title' => 'Title',
+            'description' => 'Description',
+            'image' => 'gdgdgd'
+        ];
+
+        $res = $this->post('/posts', $data);
+
+       $res->assertStatus(422);
+       $res->assertInvalid('image');
+       $res->assertJsonValidationErrors([
+          'image' => 'The image field must be a file.'
+       ]);
+    }
 
 }
