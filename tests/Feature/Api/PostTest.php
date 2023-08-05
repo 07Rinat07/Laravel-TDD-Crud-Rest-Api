@@ -174,4 +174,14 @@ class PostTest extends TestCase
            'message' => 'deleted'
         ]);
     }
+
+    /** @test */
+    public function a_post_can_be_deleted_by_only_auth_user()
+    {
+        $post = Post::factory()->create();
+        $res = $this->delete('/api/posts/' . $post->id);
+        $res->assertUnauthorized();
+
+        $this->assertDatabaseCount('posts', 1);
+    }
 }
