@@ -16,6 +16,12 @@ class PostController extends Controller
         $posts = Post::all();
         return PostResource::collection($posts)->resolve();
     }
+
+    public function show(Post $post)
+    {
+        return PostResource::make($post)->resolve();
+    }
+
     public function store(StoreRequest $request)
     {
         $data = $request->validated();
