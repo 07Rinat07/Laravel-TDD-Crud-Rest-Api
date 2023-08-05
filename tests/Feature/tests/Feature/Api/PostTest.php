@@ -15,7 +15,10 @@ class PostTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Storage::fake('local');  // TODO: что бы каждый раз непрокидывать
+        Storage::fake('local');
+        $this->withHeaders([
+           'accept' => 'application/json'
+        ]);
     }
 
     /** @test */
@@ -49,7 +52,39 @@ class PostTest extends TestCase
                 'description' => $post->description,
                 'image_url' => $post->image_url,
         ]);
+    }
+
+    /** @test */
+    public function attribute_title_is_required_for_storing_post()
+    {
+//        $this->withoutExceptionHandling(); //при валидации и нужно увидеть все ошибки это убирать
+        $data = [
+            'title' => '',
+            'description' => 'Description',
+            'image' => ''
+        ];
+
+        $res = $this->post('/api/posts', $data);
+
+       // dd($res->getContent());
+        $res->assertStatus(422);
+        $res->assertInvalid('title');
 
     }
+
+    /** @test */
+
+//    public function attribute_image_is_file_for_storing_post()
+//    {
+//        $data = [
+//            'title' => 'Title',
+//            'description' => 'Description',
+//            'image' => 'gdgdgd'
+//        ];
+//
+//        $res = $this->post('/api/posts', $data);
+//
+//        $res->assertInvalid('image');
+//    }
 
 }
