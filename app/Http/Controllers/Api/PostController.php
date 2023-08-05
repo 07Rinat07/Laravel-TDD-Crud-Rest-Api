@@ -49,4 +49,13 @@ class PostController extends Controller
         $post->update($data);
         return PostResource::make($post)->resolve();
     }
+
+    public function destroy(Post $post)
+    {
+        $post->delete();
+
+        return response()->json([
+           'message' => 'deleted'
+        ]);
+    }
 }

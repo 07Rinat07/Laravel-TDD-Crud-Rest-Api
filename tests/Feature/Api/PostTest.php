@@ -157,4 +157,21 @@ class PostTest extends TestCase
             'image_url' => $post->image_url,
         ]);
     }
+
+    /** @test */
+    public function a_post_can_be_deleted_by_auth_user()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = \App\Models\User::factory()->create();
+        $post = Post::factory()->create();
+        $res = $this->actingAs($user)->delete('/api/posts/' . $post->id);
+
+        $res->assertOk();
+        $this->assertDatabaseCount('posts', 0);
+
+        $res->assertJson([
+           'message' => 'deleted'
+        ]);
+    }
 }
