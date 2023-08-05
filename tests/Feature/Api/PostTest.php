@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Feature\Api;
+namespace Api;
 
 use App\Models\Post;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -17,7 +17,7 @@ class PostTest extends TestCase
         parent::setUp();
         Storage::fake('local');
         $this->withHeaders([
-           'accept' => 'application/json'
+            'accept' => 'application/json'
         ]);
     }
 
@@ -47,10 +47,12 @@ class PostTest extends TestCase
         Storage::disk('local')->assertExists($post->image_url);
 
         $res->assertJson([
-                'id' => $post->id,
-                'title' => $post->title,
-                'description' => $post->description,
-                'image_url' => $post->image_url,
+            'id' => $post->id,
+            'title' => $post->title,
+            'description' => $post->description,
+            'image_url' => $post->image_url,
+            'created_at' => $post->created_at->format('Y-m-d'),
+            'updated_at' => $post->updated_at->format('Y-m-d'),
         ]);
     }
 
@@ -66,7 +68,7 @@ class PostTest extends TestCase
 
         $res = $this->post('/api/posts', $data);
 
-       // dd($res->getContent());
+        // dd($res->getContent());
         $res->assertStatus(422);
         $res->assertInvalid('title');
 
@@ -84,11 +86,11 @@ class PostTest extends TestCase
 
         $res = $this->post('/posts', $data);
 
-       $res->assertStatus(422);
-       $res->assertInvalid('image');
-       $res->assertJsonValidationErrors([
-          'image' => 'The image field must be a file.'
-       ]);
+        $res->assertStatus(422);
+        $res->assertInvalid('image');
+        $res->assertJsonValidationErrors([
+            'image' => 'The image field must be a file.'
+        ]);
     }
 
 
