@@ -13,13 +13,17 @@ class PostTest extends TestCase
 {
     use DatabaseTransactions;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Storage::fake('local');  // TODO: что бы каждый раз непрокидывать
+    }
+
     /** @test */
 
     public function a_post_can_be_stored()
     {
         $this->withoutExceptionHandling();
-
-        Storage::fake('local');
 
         $file = File::create('my_image.jpg');
 
@@ -67,9 +71,34 @@ class PostTest extends TestCase
             'image' => 'gdgdgd'
         ];
 
-       $res = $this->post('/posts', $data);
+        $res = $this->post('/posts', $data);
 
-       $res->assertRedirect();
-       $res->assertInvalid('image');
+        $res->assertRedirect();
+        $res->assertInvalid('image');
+    }
+
+    /** @test */
+    public function a_post_can_be_updated()
+    {
+       // $this->withoutExceptionHandling();
+
+        $post = Post::factory()->create();
+        $file = File::create('image.jpg');
+
+        $data = [
+          'title' => 'Title edited',
+          'description' => 'Description edited',
+          'image' => $file
+        ];
+        $res = $this->patch('/posts/' . $post->id, $data);
+
+        $res->assertOk();
+
+        $updatedPost = Post::first();
+        $this->assertEquals($data['title'], $updatedPost->title);
+        $this->assertEquals($data['description'], $updatedPost->description);
+        $this->assertEquals('images/' . $file->hashName(), $updatedPost->image_url);
+
+        $this->assertEquals($post->id, $updatedPost->id);
     }
 }
