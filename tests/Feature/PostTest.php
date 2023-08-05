@@ -80,15 +80,15 @@ class PostTest extends TestCase
     /** @test */
     public function a_post_can_be_updated()
     {
-       // $this->withoutExceptionHandling();
+         $this->withoutExceptionHandling();
 
         $post = Post::factory()->create();
         $file = File::create('image.jpg');
 
         $data = [
-          'title' => 'Title edited',
-          'description' => 'Description edited',
-          'image' => $file
+            'title' => 'Title edited',
+            'description' => 'Description edited',
+            'image' => $file
         ];
         $res = $this->patch('/posts/' . $post->id, $data);
 
@@ -100,5 +100,25 @@ class PostTest extends TestCase
         $this->assertEquals('images/' . $file->hashName(), $updatedPost->image_url);
 
         $this->assertEquals($post->id, $updatedPost->id);
+    }
+
+    /** @test */
+
+    public function response_for_route_posts_index_is_view_post_index_with_posts()
+    {
+        $this->withoutExceptionHandling();
+
+        $posts = Post::factory(10)->create();
+       // dd($posts);
+
+        $res = $this->get('/posts');
+
+        $res->assertViewIs('posts.index');
+
+        $res->assertSeeText('View page');
+
+        $titles = $posts->pluck('title')->toArray();
+
+        $res->assertSeeText($titles);
     }
 }
