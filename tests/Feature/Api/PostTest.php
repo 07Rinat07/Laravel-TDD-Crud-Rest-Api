@@ -118,4 +118,26 @@ class PostTest extends TestCase
 
     }
 
+    /** @test */
+    public function response_for_route_posts_index_is_view_post_index_with_posts()
+    {
+        $this->withoutExceptionHandling();
+
+        $posts = Post::factory(10)->create();
+
+        $res = $this->get('/api/posts');
+
+        $res->assertOk();
+
+        $json = $posts->map(function ($post) {
+            return [
+                'id' => $post->id,
+                'title' => $post->title,
+                'description' => $post->description,
+                'image_url' => $post->image_url,
+            ];
+        })->toArray();
+
+        $res->assertJson($json);
+    }
 }
