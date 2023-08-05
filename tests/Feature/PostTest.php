@@ -80,7 +80,7 @@ class PostTest extends TestCase
     /** @test */
     public function a_post_can_be_updated()
     {
-         $this->withoutExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $post = Post::factory()->create();
         $file = File::create('image.jpg');
@@ -109,7 +109,7 @@ class PostTest extends TestCase
         $this->withoutExceptionHandling();
 
         $posts = Post::factory(10)->create();
-       // dd($posts);
+        // dd($posts);
 
         $res = $this->get('/posts');
 
@@ -136,5 +136,29 @@ class PostTest extends TestCase
         $res->assertSeeText('Show page');
         $res->assertSeeText($post->title);
         $res->assertSeeText($post->description);
+    }
+
+    /** @test */
+    public function a_post_can_be_deleted_by_auth_user()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = \App\Models\User::factory()->create();
+        $post = Post::factory()->create();
+        $res = $this->actingAs($user)->delete('/posts/' . $post->id);
+
+        $res->assertOk();
+        $this->assertDatabaseCount('posts', 0);
+    }
+
+
+    /** @test */
+    public function a_post_can_be_deleted_by_only_auth_user()
+    {
+        $post = Post::factory()->create();
+        $res = $this->delete('/posts/' . $post->id);
+        $res->assertRedirect();
+
+        $this->assertDatabaseCount('posts', 1);
     }
 }

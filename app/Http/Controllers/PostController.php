@@ -43,4 +43,9 @@ class PostController extends Controller
         unset($data['image']);
         $post->update($data);
     }
+
+    public function destroy(Post $post)
+    {
+        $post->delete();
+    }
 }
