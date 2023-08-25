@@ -13,7 +13,7 @@
 ### To run the project locally, you need to type commands in the terminal in turn ==>
 * php artisan serve
 
-### For Unit tests:
+### For tests:
 * cp .env .env.testing
 * php artisan make:test TicketTest --unit
 * php artisan migrate --seed --env=testing
